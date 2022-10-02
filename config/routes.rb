@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get "user/:id", to: "users#show", as: "user"
 
   devise_for :users, controllers: {
-    sesions: 'users/sessions',
+    sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
 end
