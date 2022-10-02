@@ -2,9 +2,18 @@ class Message < ApplicationRecord
   belongs_to :user
   belongs_to :room
 
-  after_create_commit { broadcast_append_to self.room }
+  has_many_attached :attachments, dependent: :destroy
+
+  after_create_commit { broadcast_append_to room }
 
   before_create :confirm_participant
+
+  def chat_attachment(index)
+    target = attachments[index]
+    return unless attachments.attached?
+
+    target.variant(resize_to_limit: [150, 150])
+  end
 
   def confirm_participant
     if self.room.is_private
