@@ -17,6 +17,12 @@ export default class extends Controller {
       const reader = new FileReader();
       this.createAndDisplayFilePreviewElements(file, reader);
     }
+    this.toggleVisibility();
+  }
+
+  toggleVisibility () {
+    let preview = document.getElementById("attachment-previews");
+    preview.classList.toggle("d-none");
   }
   /**
    * Creates and displays the preview elements for the file.
