@@ -2,10 +2,12 @@ class Room < ApplicationRecord
   validates_uniqueness_of :name
   scope :public_rooms, -> { where(is_private: false) }
 
-  after_create_commit { broadcast_if_public }
+  # after_create_commit { broadcast_if_public }
 
   has_many :messages
   has_many :participants, dependent: :destroy
+  has_many :joinables, dependent: :destroy
+  has_many :joined_users, through: :joinables, source: :user
 
   def broadcast_if_public
     broadcast_append_to "rooms" unless self.is_private
@@ -16,7 +18,6 @@ class Room < ApplicationRecord
     users.each do |user|
       Participant.create(user_id: user.id, room_id: single_room.id )
     end
-
 
     single_room
   end
